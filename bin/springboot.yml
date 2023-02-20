@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: springbootdeployment
+  labels:
+    app: springboot
+    type: front-end
+spec:
+  template:
+    metadata:
+      name: springboot-pod
+      labels:
+        app: springboot
+        type: front-end
+      spec:
+        containers:
+        - name: springboot-pod
+          image: dpraveenkumarmpv/devopsproject:springboot-1.0
+          ports:
+            - name: springboot-pod
+              containerPort: 8080      
+  replicas: 1  
+  selector:
+     matchLables:
+       app: springboot
+       type: front-end
+          
+# Node Port Service
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: springboot-service
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30008
+  selector:
+     app: springboot
+     type: front-end
